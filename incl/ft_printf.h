@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 15:39:15 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 17:27:27 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/19 18:07:55 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,11 @@ typedef struct		s_node
 	int				width;
 	int				precision;
 	int				precision_set;
+	int				l_flag;
+	int				ll_flag;
+	int				ucl_flag;
+	int				h_flag;
+	int				hh_flag;
 	int				hash;
 	struct s_node	*next;
 }					t_node;
@@ -72,6 +77,7 @@ char				*ft_strnew_c(size_t size, char c);
 
 char				*ft_ftoa(double nb, int acc);
 char				*address_pre(char *str);
+int					set_prefixes(char *str, t_node *current);
 
 int					check_width(char *str, t_node *current);
 void				add_width(t_node *current);

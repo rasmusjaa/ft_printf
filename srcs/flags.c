@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 11:53:15 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 17:39:56 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/19 18:13:53 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,11 @@ static int	check_flags2(char **str, t_node *current)
 	if (ft_isdigit(**str))
 	{
 		*str = (*str) + check_width(*str, current);
+		return (1);
+	}
+	if (**str == 'h' || **str == 'l' || **str == 'L')
+	{
+		*str = (*str) + set_prefixes(*str, current);
 		return (1);
 	}
 	return (-1);

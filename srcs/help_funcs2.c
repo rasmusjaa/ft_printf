@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 17:38:29 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 17:44:36 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/19 18:07:40 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,4 +94,29 @@ char					*address_pre(char *str)
 	tmp = ft_strjoin(pre, str);
 	free(str);
 	return (tmp);
+}
+
+int						set_prefixes(char *str, t_node *current)
+{
+	if(str[0] == 'l')
+	{
+		if(str[1] == 'l')
+		{
+			current->ll_flag = 1;
+			return (2);
+		}
+		current->l_flag = 1;
+	}
+	if(str[0] == 'h')
+	{
+		if(str[1] == 'h')
+		{
+			current->hh_flag = 1;
+			return (2);
+		}
+		current->h_flag = 1;
+	}
+	if(str[0] == 'L')
+		current->ucl_flag = 1;
+	return (1);
 }

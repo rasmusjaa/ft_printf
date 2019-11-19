@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 15:39:03 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 17:33:22 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/19 18:05:03 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,11 @@ void		default_flags(t_node *current)
 	current->precision_set = 0;
 	current->space = 0;
 	current->hash = 0;
+	current->l_flag = 0;
+	current->ll_flag = 0;
+	current->ucl_flag = 0;
+	current->h_flag = 0;
+	current->hh_flag = 0;
 }
 
 int			check_arg(char **str, va_list args, t_node *current)
