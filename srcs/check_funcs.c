@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 14:32:36 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 12:45:30 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/25 12:00:13 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,24 @@ int			is_nb(char c)
 	return (0);
 }
 
-int			plus_minus(char *str, t_node *current)
+int			plus_minus(char *str, long long n, t_node *current)
+{
+	if (n < 0)
+	{
+		current->minus_flag = -1;
+	}
+	if (*str == '+')
+	{
+		current->plus_flag = 1;
+	}
+	return (1);
+}
+
+int			plus_minus2(char *str, t_node *current)
 {
 	if (*str == '-')
 	{
-		current->plus_flag = -1;
+		current->minus_flag = -1;
 	}
 	if (*str == '+')
 	{

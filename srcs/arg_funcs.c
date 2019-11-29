@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 10:26:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 18:47:52 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/29 16:27:07 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,21 @@ int			text_to_node(t_node *current, char *str, int len)
 	return (0);
 }
 
-int			arg_c_to_node(t_node *current, va_list args)
+int				arg_c_to_node(t_node *current, va_list args)
 {
-	t_node	*temp;
+	t_node		*temp;
+	char		c;
 
 	if (!(temp = (t_node *)malloc(sizeof(t_node))))
 		return (-1);
 	temp->str = ft_strdup(" ");
-	temp->str[0] = va_arg(args, int);
+	c = va_arg(args, int);
+	if (c == '\0')
+	{
+		current->cnull = 1;
+		c = 'x';
+	}
+	temp->str[0] = c;
 	current->arg = 'c';
 	flags_from_temp(temp, current);
 	current->next = temp;
@@ -42,13 +49,18 @@ int			arg_c_to_node(t_node *current, va_list args)
 	return (0);
 }
 
-int			arg_s_to_node(t_node *current, va_list args)
+int				arg_s_to_node(t_node *current, va_list args)
 {
-	t_node	*temp;
+	t_node		*temp;
+	char		*s;
 
 	if (!(temp = (t_node *)malloc(sizeof(t_node))))
 		return (-1);
-	temp->str = ft_strdup(va_arg(args, char *));
+	s = va_arg(args, char *);
+	if (!s)
+		temp->str = ft_strdup(NULL_STRING);
+	else
+		temp->str = ft_strdup(s);
 	current->arg = 's';
 	flags_from_temp(temp, current);
 	current->next = temp;
@@ -57,9 +69,9 @@ int			arg_s_to_node(t_node *current, va_list args)
 	return (0);
 }
 
-int			arg_p_to_node(t_node *current, va_list args)
+int				arg_p_to_node(t_node *current, va_list args)
 {
-	t_node	*temp;
+	t_node		*temp;
 
 	if (!(temp = (t_node *)malloc(sizeof(t_node))))
 		return (-1);
@@ -73,21 +85,21 @@ int			arg_p_to_node(t_node *current, va_list args)
 	return (0);
 }
 
-int			arg_d_to_node(t_node *current, va_list args)
+int				arg_d_to_node(t_node *current, va_list args)
 {
-	t_node	*temp;
+	t_node		*temp;
+	long long	n;
 
 	if (!(temp = (t_node *)malloc(sizeof(t_node))))
 		return (-1);
+	n = va_arg(args, long long int);
 	if (current->l_flag == 1)
-		temp->str = ft_base_ltoa(va_arg(args, long int),
-			10, BASE16LC);
+		temp->str = ft_base_ltoa((long int)n, 10, BASE16LC);
 	else if (current->ll_flag == 1)
-		temp->str = ft_base_ltoa(va_arg(args, long long int),
-			10, BASE16LC);
+		temp->str = ft_base_ltoa((long long int)n, 10, BASE16LC);
 	else
-		temp->str = ft_itoa(va_arg(args, int));
-	plus_minus(temp->str, current);
+		temp->str = ft_itoa((int)n);
+	plus_minus(temp->str, n, current);
 	current->arg = 'd';
 	flags_from_temp(temp, current);
 	current->next = temp;

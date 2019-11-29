@@ -6,7 +6,7 @@
 #    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/07 15:06:49 by rjaakonm          #+#    #+#              #
-#    Updated: 2019/11/19 17:41:55 by rjaakonm         ###   ########.fr        #
+#    Updated: 2019/11/25 14:41:45 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ SRCS =	./srcs/ft_printf.c \
 		./srcs/arg_funcs3.c \
 		./srcs/help_funcs.c \
 		./srcs/help_funcs2.c \
+		./srcs/help_funcs3.c \
 		./srcs/check_funcs.c \
 		./srcs/width.c \
 		./srcs/flags.c \

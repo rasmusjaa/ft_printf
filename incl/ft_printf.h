@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 15:39:15 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 18:07:55 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/29 16:15:04 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 # include <unistd.h>
 # include <stdarg.h>
 # define N_TYPES 10
+# define NULL_STRING "(null)"
+# define BASE16UC "0123456789ABCDEF"
+# define BASE16LC "0123456789abcdef"
 # define BLUE "\033[0;34m"
 # define CYAN "\033[0;36m"
 # define GREEN "\033[0;32m"
@@ -35,7 +38,9 @@ typedef struct		s_node
 	char			*str;
 	char			arg;
 	int				plus_flag;
+	int				minus_flag;
 	int				space;
+	int				empty;
 	int				width;
 	int				precision;
 	int				precision_set;
@@ -45,6 +50,11 @@ typedef struct		s_node
 	int				h_flag;
 	int				hh_flag;
 	int				hash;
+	int				xflag;
+	long long int	nb;
+	double			float_left;
+	double			float_right;
+	int				cnull;
 	struct s_node	*next;
 }					t_node;
 
@@ -71,13 +81,16 @@ int					arg_percent_to_node(t_node *current);
 
 extern t_types		g_types[N_TYPES];
 
-int					ft_putstr_ret(char const *s);
+int					ft_putstr_ret(t_node *current);
 char				*ft_strndup(const char *s, int len);
 char				*ft_strnew_c(size_t size, char c);
+char				*trim_n_first(int n, char *str);
 
-char				*ft_ftoa(double nb, int acc);
+char				*ft_ftoa(long double nb, t_node *current);
 char				*address_pre(char *str);
 int					set_prefixes(char *str, t_node *current);
+
+void				add_empty(t_node *temp, t_node *current);
 
 int					check_width(char *str, t_node *current);
 void				add_width(t_node *current);
@@ -92,7 +105,8 @@ void				exits(int i);
 int					ft_printf(const char *format, ...);
 
 int					is_nb(char c);
-int					plus_minus(char *str, t_node *current);
+int					plus_minus(char *str, long long n, t_node *current);
+int					plus_minus2(char *str, t_node *current);
 int					check_precision(char *str, t_node *current);
 
 #endif

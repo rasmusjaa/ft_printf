@@ -6,14 +6,14 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/11 13:14:48 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/11 13:15:07 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/25 11:09:27 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int			ft_pow(int n, int pow)
+long long		ft_pow(long long n, int pow)
 {
-	int		i;
-	float	total;
+	int			i;
+	long long	total;
 
 	i = 1;
 	total = n;

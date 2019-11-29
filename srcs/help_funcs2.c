@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 17:38:29 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 18:07:40 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/29 17:35:15 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,59 +22,131 @@ void					swap_sign(char *str)
 	{
 		while (str[i] && str[i] != '-' && str[i] != '+')
 			i++;
-		if (str[i] == '-' || str[i] == '+')
+		if (str[i] == '-' || str[i] == '+' || (str[i] == ' ' && i == 0))
 		{
 			str[0] = str[i];
 			str[i] = '0';
 		}
 	}
-}
-
-char					*decimal_ftoa(double nb, int acc)
-{
-	char				*str;
-	char				*tmp1;
-	char				*tmp2;
-	int					i;
-	unsigned long long	n;
-
 	i = 0;
-	str = (char *)malloc(sizeof(char) * (acc + 1));
-	if (!str)
-		return (NULL);
-	n = (unsigned long long)(nb * ft_pow(10, acc) + 0.5);
-	str = ft_base_ltoa(n, 10, BASE16LC);
-	if (ft_strlen(str) < (size_t)acc)
+	if (str[i] == '0')
 	{
-		tmp1 = ft_strnew_c(acc - ft_strlen(str), '0');
-		tmp2 = str;
-		str = ft_strjoin(tmp1, tmp2);
-		free(tmp1);
-		free(tmp2);
+		while (str[i] && str[i] == '0')
+			i++;
+		if (str[i] == ' ' && str[i + 1] != ' ' && str[i + 1] != 0)
+		{
+			str[i] = '0';
+			str[0] = ' ';
+		}
+		if ((str[i] == 'x' || str[i] == 'X') && i != 1)
+		{
+			str[1] = str[i];
+			str[i] = '0';
+		}
+		i = 0;
+		while (str[i] == ' ')
+			i++;
+		if (i > 1 && str[i - 1] == ' ' && str[i] != ' ' && str[i] != 0)
+		{
+			str[i - 1] = '0';
+			str[0] = ' ';
+		}
 	}
-	return (str);
 }
 
-char					*ft_ftoa(double nb, int acc)
+char					*float_begin(long double nb, t_node *current)
 {
-	unsigned long long	n;
+	int					x;
+	int					y;
+	double 				nb2;
+	char				*s1;
+
+	x = 0;
+	y = 0;
+	nb2 = 0;
+	while (nb >= 1)
+	{
+		nb = nb / 10;
+		x++;
+	}
+	if (x > 0)
+		s1 = ft_strnew(x);
+	else
+	{
+		s1 = ft_strnew(1);
+		s1[0] = '0';
+	}
+	while (x > 0)
+	{
+		nb = nb * 10;
+		s1[y] = (int)nb + '0';
+		nb2 = nb2 * 10 + (int)nb;
+		nb = nb - (int)nb;
+		x--;
+		y++;
+	}
+	current->float_left = nb2;
+	return (s1);
+}
+
+long double				double_divide(long double nb, int n, int divider)
+{
+	if (n <= 0)
+		return (0);
+	while (n > 0)
+	{
+		nb = nb / divider;
+		n--;
+	}
+	return (nb);
+}
+
+char					*float_end(long double nb, t_node *current)
+{
+	int					x;
+	double 				nb2;
+	char				*s2;
+	int					not;
+
+	x = 0;
+	not = 0;
+	nb2 = 0;
+	s2 = ft_strnew(current->precision);
+	while (nb >= 1)
+		nb = nb - double_divide(0.5, current->precision, 10);
+	while (x < current->precision)
+	{
+		nb = nb * 10;
+		if ((int)nb >= 10)
+			return (NULL);
+		s2[x] = (int)(nb) + '0';
+		nb2 = nb2 * 10 + (int)nb;
+		nb = nb - (double)(int)nb;
+		x++;
+	}
+	if (nb * 10 >=5 && current->precision >= 19 && s2[x - 1] < '9')
+		s2[x - 1]++;
+	current->float_right = nb2;
+	return (s2);
+}
+
+char					*ft_ftoa(long double nb, t_node *current)
+{
 	char				*s1;
 	char				*s2;
 	char				*dbl;
 	char				sign[2];
 
-	sign[0] = 0;
+	sign[0] = nb < 0 ? '-' : 0;
 	sign[1] = 0;
 	if (nb < 0)
-	{
-		sign[0] = '-';
 		nb = nb * -1;
-	}
-	n = (unsigned long long)nb;
-	s1 = ft_base_ltoa(n, 10, BASE16LC);
-	nb = nb - n;
-	s2 = decimal_ftoa(nb, acc);
-	if (acc <= 0)
+	nb = nb + double_divide(0.5, current->precision, 10);
+	s1 = float_begin(nb, current);
+	if (nb - current->float_left >= 0.5 && current->precision <= 0)
+		s1 = float_begin(nb + 1, current);
+	s2 = float_end(nb - current->float_left, current);
+	if (current->precision <= 0)
 		dbl = ft_strjoin(sign, s1);
 	else
 		dbl = ft_strjoin(ft_strjoin(ft_strjoin(sign, s1), "."), s2);

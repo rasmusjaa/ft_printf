@@ -6,12 +6,12 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 15:39:03 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 18:05:03 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/29 17:36:26 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
-#include "libft.h"
+#include "../incl/ft_printf.h"
+#include "../libft/incl/libft.h"
 
 int			print_list(t_node *start)
 {
@@ -24,13 +24,13 @@ int			print_list(t_node *start)
 	free(temp);
 	while (start->next != NULL)
 	{
-		total = total + ft_putstr_ret(start->str);
+		total = total + ft_putstr_ret(start);
 		temp = start;
 		start = start->next;
 		free(temp->str);
 		free(temp);
 	}
-	total = total + ft_putstr_ret(start->str);
+	total = total + ft_putstr_ret(start);
 	temp = start;
 	start = start->next;
 	free(temp->str);
@@ -41,16 +41,23 @@ int			print_list(t_node *start)
 void		default_flags(t_node *current)
 {
 	current->plus_flag = 0;
+	current->minus_flag = 0;
 	current->width = 0;
 	current->precision = 6;
 	current->precision_set = 0;
 	current->space = 0;
+	current->empty = 0;
 	current->hash = 0;
 	current->l_flag = 0;
 	current->ll_flag = 0;
 	current->ucl_flag = 0;
 	current->h_flag = 0;
 	current->hh_flag = 0;
+	current->nb = 0;
+	current->float_left = 0.0;
+	current->float_right = 0.0;
+	current->cnull = 0;
+	current->arg = '0';
 }
 
 int			check_arg(char **str, va_list args, t_node *current)
@@ -73,6 +80,8 @@ int			check_arg(char **str, va_list args, t_node *current)
 	if (**str == '%')
 		arg_percent_to_node(current);
 	(*str)++;
+	if (current->arg == '0')
+		return (-1);
 	return (0);
 }
 
@@ -109,14 +118,18 @@ int			ft_printf(const char *format, ...)
 	char	*str;
 	va_list	args;
 	t_node	*start;
+	int		rvalue;
 
 	if (!(start = (t_node *)malloc(sizeof(t_node))))
 		return (-1);
 	start->next = NULL;
 	va_start(args, format);
 	str = (char *)format;
-	if (parse(str, args, start) == -1)
-		return (-1);
+	if (!str || str[0] == 0)
+		return (1);
+	rvalue = parse(str, args, start);
+	if (rvalue == -1)
+		return (1);
 	va_end(args);
-	return (0);
+	return (rvalue);
 }

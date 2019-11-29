@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 11:52:02 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 17:39:12 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/29 17:34:53 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,29 @@ t_types g_types[N_TYPES] =
 	{'f', arg_f_to_node},
 };
 
-int			ft_putstr_ret(char const *s)
+int			ft_putstr_ret(t_node *current)
 {
 	int		i;
+	char	*s;
 
 	i = 0;
-	if (s)
+	s = current->str;
+	if (current->arg == 'c')
 	{
 		while (s[i])
+		{
+			if (current->cnull == 1 && s[i] == 'x')
+				s[i] = '\0';
 			i++;
+		}
+		write(1, s, i);
+	}
+	else
+	{
+		while (s[i])
+		{
+			i++;
+		}
 		write(1, s, i);
 	}
 	return (i);
@@ -74,4 +88,14 @@ char		*ft_strnew_c(size_t size, char c)
 	}
 	string[i] = 0;
 	return (string);
+}
+
+char		*trim_n_first(int n, char *str)
+{
+	char	*tmp;
+
+	tmp = ft_strdup(&str[n]);
+	free(str);
+	str = tmp;
+	return (str);
 }

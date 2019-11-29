@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/12 18:16:43 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/19 17:45:05 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/29 17:32:09 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int			check_width(char *str, t_node *current)
 
 	i = 0;
 	sign = 1;
-	if (current->plus_flag == -1)
+	if (current->minus_flag == -1)
 		sign = -1;
 	while (ft_isdigit(str[i]))
 	{
@@ -47,8 +47,8 @@ void		add_width(t_node *current)
 	char	c;
 
 	c = ' ';
-	if (current->space == 1 && is_nb(current->arg) &&
-			current->precision_set == 0)
+	if (current->space == 1 && (is_nb(current->arg) || current->arg == '%') &&
+			current->width > 0 && (current->precision_set == 0 || current->arg == 'f'))
 		c = '0';
 	len = ft_strlen(current->str);
 	if (current->width > 0 && current->width > len)
@@ -77,13 +77,26 @@ void		add_precision(t_node *current, int precision)
 	temp = current->str;
 	if (current->arg == 's' && (int)ft_strlen(current->str) > precision)
 	{
-		current->str = ft_strsub(current->str, 0, precision);
+		if (precision == 0 && current->width != 0)
+			current->str = ft_strdup(" ");
+		else
+			current->str = ft_strsub(current->str, 0, precision);
 		free(temp);
 	}
-	if (current->arg == 'd' || current->arg == 'i')
+	if (is_nb(current->arg))
 	{
 		if (current->str[0] == '-' || current->str[0] == '+')
 			precision++;
+		if (precision == 0 && current->str[0] == '0' && current->plus_flag == 0 && current->arg != 'f')
+		{
+			current->str = ft_strdup("");
+			free(temp);
+		}
+		if (precision == 1 && current->str[1] == '0' && current->plus_flag == 1)
+		{
+			current->str = ft_strdup("+");
+			free(temp);
+		}
 		if (precision > (int)ft_strlen(current->str))
 		{
 			diff = precision - ft_strlen(current->str);

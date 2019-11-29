@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 11:58:55 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/13 16:42:32 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/25 11:08:38 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int					ft_longlong_numbercount(long long n, int base);
 char				*ft_str_rev(char *s);
 void				ft_int_swap(int *a, int *b);
 void				ft_char_swap(char *a, char *b);
-int					ft_pow(int n, int pow);
+long long			ft_pow(long long n, int pow);
 char				*ft_strnew_c(size_t size, char c);
 char				*ft_base_ltoa(long long n, int base, char *chars);
 
