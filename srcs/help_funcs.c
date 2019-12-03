@@ -6,26 +6,40 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 11:52:02 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/29 17:34:53 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/12/03 11:55:09 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft.h"
 
-t_types g_types[N_TYPES] =
+int			ft_fd_putstr_ret(int fd, t_node *current)
 {
-	{'c', arg_c_to_node},
-	{'s', arg_s_to_node},
-	{'p', arg_p_to_node},
-	{'d', arg_d_to_node},
-	{'i', arg_d_to_node},
-	{'o', arg_o_to_node},
-	{'u', arg_u_to_node},
-	{'x', arg_x_to_node},
-	{'X', arg_ucx_to_node},
-	{'f', arg_f_to_node},
-};
+	int		i;
+	char	*s;
+
+	i = 0;
+	s = current->str;
+	if (current->arg == 'c')
+	{
+		while (s[i])
+		{
+			if (current->cnull == 1 && s[i] == 'x')
+				s[i] = '\0';
+			i++;
+		}
+		write(fd, s, i);
+	}
+	else
+	{
+		while (s[i])
+		{
+			i++;
+		}
+		write(fd, s, i);
+	}
+	return (i);
+}
 
 int			ft_putstr_ret(t_node *current)
 {

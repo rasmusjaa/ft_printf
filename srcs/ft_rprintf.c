@@ -1,72 +1,64 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_rprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/29 15:39:03 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/12/03 12:56:32 by rjaakonm         ###   ########.fr       */
+/*   Created: 2019/12/03 12:02:30 by rjaakonm          #+#    #+#             */
+/*   Updated: 2019/12/03 12:57:10 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/ft_printf.h"
 #include "../libft/incl/libft.h"
 
-static int	print_list(t_node *start)
+static char	*to_string_list(t_node *start, int len)
 {
-	int		total;
 	t_node	*temp;
+	char	*final;
 
-	total = 0;
+	final = ft_strnew(len);
 	temp = start;
 	start = start->next;
 	free(temp);
 	while (start->next != NULL)
 	{
-		total = total + ft_putstr_ret(start);
+		ft_strcat(final, start->str);
 		temp = start;
 		start = start->next;
 		free(temp->str);
 		free(temp);
 	}
-	total = total + ft_putstr_ret(start);
+	ft_strcat(final, start->str);
 	temp = start;
 	start = start->next;
 	free(temp->str);
 	free(temp);
-	return (total);
+	return (final);
 }
 
-int			check_arg(char **str, va_list args, t_node *current)
+static char	*return_list(t_node *start)
 {
-	int		i;
-	int		j;
+	int		total;
+	t_node	*temp;
+	t_node	*begin;
 
-	i = 0;
-	j = 0;
-	default_flags(current);
-	while (j >= 0)
-		j = check_flags(str, current, args);
-	while (i < N_TYPES)
+	total = 0;
+	begin = start;
+	temp = start;
+	start = start->next;
+	while (start->next != NULL)
 	{
-		if (g_types[i].c == **str)
-			if (g_types[i].func(current, args) == -1)
-				return (-1);
-		i++;
+		total = total + ft_strlen(start->str);
+		temp = start;
+		start = start->next;
 	}
-	if (**str == '%')
-		arg_percent_to_node(current);
-	(*str)++;
-	if (current->arg == '0')
-	{
-		free(current);
-		return (-1);
-	}
-	return (0);
+	total = total + ft_strlen(start->str);
+	return (to_string_list(begin, total));
 }
 
-static int	parse(char *str, va_list args, t_node *start)
+static char	*rparse(char *str, va_list args, t_node *start)
 {
 	size_t	len;
 	t_node	*current;
@@ -81,39 +73,37 @@ static int	parse(char *str, va_list args, t_node *start)
 		if (len > 0)
 		{
 			if ((text_to_node(current, str, len) == -1))
-				return (-1);
+				return (NULL);
 			current = current->next;
 		}
 		if (*(str) == '\0')
 			break ;
 		++str;
 		if ((check_arg(&str, args, current)) == -1)
-			return (-1);
+			return (NULL);
 		current = current->next;
 	}
-	return (print_list(start));
+	return (return_list(start));
 }
 
-int			ft_printf(const char *format, ...)
+char		*ft_rprintf(const char *format, ...)
 {
 	char	*str;
 	va_list	args;
 	t_node	*start;
-	int		rvalue;
+	char	*rvalue;
 
 	if (!(start = (t_node *)malloc(sizeof(t_node))))
-		return (-1);
+		return (NULL);
 	start->next = NULL;
 	va_start(args, format);
 	str = (char *)format;
 	if (!str || str[0] == 0)
 	{
 		free(start);
-		return (1);
+		return (NULL);
 	}
-	rvalue = parse(str, args, start);
-	if (rvalue == -1)
-		return (1);
+	rvalue = rparse(str, args, start);
 	va_end(args);
 	return (rvalue);
 }

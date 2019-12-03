@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   ft_dprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/29 15:39:03 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/12/03 12:56:32 by rjaakonm         ###   ########.fr       */
+/*   Created: 2019/12/03 11:47:32 by rjaakonm          #+#    #+#             */
+/*   Updated: 2019/12/03 12:55:59 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incl/ft_printf.h"
 #include "../libft/incl/libft.h"
 
-static int	print_list(t_node *start)
+static int	dprint_list(int fd, t_node *start)
 {
 	int		total;
 	t_node	*temp;
@@ -24,13 +24,13 @@ static int	print_list(t_node *start)
 	free(temp);
 	while (start->next != NULL)
 	{
-		total = total + ft_putstr_ret(start);
+		total = total + ft_fd_putstr_ret(fd, start);
 		temp = start;
 		start = start->next;
 		free(temp->str);
 		free(temp);
 	}
-	total = total + ft_putstr_ret(start);
+	total = total + ft_fd_putstr_ret(fd, start);
 	temp = start;
 	start = start->next;
 	free(temp->str);
@@ -38,35 +38,7 @@ static int	print_list(t_node *start)
 	return (total);
 }
 
-int			check_arg(char **str, va_list args, t_node *current)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	default_flags(current);
-	while (j >= 0)
-		j = check_flags(str, current, args);
-	while (i < N_TYPES)
-	{
-		if (g_types[i].c == **str)
-			if (g_types[i].func(current, args) == -1)
-				return (-1);
-		i++;
-	}
-	if (**str == '%')
-		arg_percent_to_node(current);
-	(*str)++;
-	if (current->arg == '0')
-	{
-		free(current);
-		return (-1);
-	}
-	return (0);
-}
-
-static int	parse(char *str, va_list args, t_node *start)
+static int	dparse(int fd, char *str, va_list args, t_node *start)
 {
 	size_t	len;
 	t_node	*current;
@@ -91,10 +63,10 @@ static int	parse(char *str, va_list args, t_node *start)
 			return (-1);
 		current = current->next;
 	}
-	return (print_list(start));
+	return (dprint_list(fd, start));
 }
 
-int			ft_printf(const char *format, ...)
+int			ft_dprintf(int fd, const char *format, ...)
 {
 	char	*str;
 	va_list	args;
@@ -111,7 +83,7 @@ int			ft_printf(const char *format, ...)
 		free(start);
 		return (1);
 	}
-	rvalue = parse(str, args, start);
+	rvalue = dparse(fd, str, args, start);
 	if (rvalue == -1)
 		return (1);
 	va_end(args);

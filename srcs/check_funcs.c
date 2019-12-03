@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/18 14:32:36 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/25 12:00:13 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/11/29 19:46:52 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,23 @@ int			check_precision(char *str, t_node *current)
 		current->precision = current->precision * 10 + (str[i] - '0');
 		i++;
 	}
+	return (i);
+}
+
+int			check_width(char *str, t_node *current)
+{
+	int		sign;
+	int		i;
+
+	i = 0;
+	sign = 1;
+	if (current->minus_flag == -1)
+		sign = -1;
+	while (ft_isdigit(str[i]))
+	{
+		current->width = current->width * 10 + (str[i] - '0');
+		i++;
+	}
+	current->width = current->width * sign;
 	return (i);
 }

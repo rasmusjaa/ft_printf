@@ -6,31 +6,14 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 11:53:15 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/29 17:34:43 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/12/03 12:54:31 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft.h"
 
-static void	move_flags(t_node *temp, t_node *current)
-{
-	temp->width = current->width;
-	temp->precision = current->precision;
-	temp->precision_set = current->precision_set;
-	temp->plus_flag = current->plus_flag;
-	temp->minus_flag = current->minus_flag;
-	temp->arg = current->arg;
-	temp->space = current->space;
-	temp->empty = current->empty;
-	temp->hash = current->hash;
-	temp->nb = current->nb;
-	temp->float_left = current->float_left;
-	temp->float_right = current->float_right;
-	temp->cnull = current->cnull;
-}
-
-void		add_hash(t_node *temp, t_node *current)
+static void	add_hash(t_node *temp, t_node *current)
 {
 	char	*tmp;
 
@@ -40,19 +23,13 @@ void		add_hash(t_node *temp, t_node *current)
 		temp->str = ft_strjoin("0", tmp);
 		free(tmp);
 	}
-	if (current->arg == 'x' && current->nb != 0)
+	if ((current->arg == 'x' || current->arg == 'X') && current->nb != 0)
 	{
 		tmp = temp->str;
-		temp->str = ft_strjoin("0x", tmp);
+		temp->str = ft_strjoin(current->arg == 'x' ? "0x" : "0X", tmp);
 		free(tmp);
 	}
-	if (current->arg == 'X'  && current->nb != 0)
-	{
-		tmp = temp->str;
-		temp->str = ft_strjoin("0X", tmp);
-		free(tmp);
-	}
-	if (current->arg == 'f'  && current->precision == 0)
+	if (current->arg == 'f' && current->precision == 0)
 	{
 		tmp = temp->str;
 		temp->str = ft_strjoin(tmp, ".");
@@ -65,29 +42,44 @@ void		flags_from_temp(t_node *temp, t_node *current)
 	char	*tmp;
 
 	move_flags(temp, current);
-	if (current->plus_flag == 1)
+	if (current->plus_flag == 1 && (current->arg == 'd' || current->arg == 'f'))
 	{
-		if (temp->str[0] == '-' && (current->arg == 'd' || current->arg == 'f'))
+		if (temp->str[0] == '-')
 			current->plus_flag = 0;
-		else if (current->arg == 'd' || current->arg == 'f')
+		else
 		{
 			tmp = temp->str;
 			temp->str = ft_strjoin("+", tmp);
 			free(tmp);
 		}
-		else
-			return ;
 	}
 	if (current->precision_set == 1)
 		add_precision(temp, current->precision);
 	if (current->empty == 1 && current->arg != 'f')
 		add_empty(temp, current);
 	if (current->hash == 1)
-	 	add_hash(temp, current);
+		add_hash(temp, current);
 	add_width(temp);
 	swap_sign(temp->str);
 	if (current->empty == 1 && current->arg == 'f')
 		add_empty(temp, current);
+}
+
+static int	check_from_arg(char **str, t_node *current, va_list args)
+{
+	int		nb;
+
+	nb = va_arg(args, int);
+	*str = (*str) - 1;
+	if (**str == '.')
+	{
+		current->precision_set = 1;
+		current->precision = nb;
+	}
+	else
+		current->width = nb;
+	*str = (*str) + 2;
+	return (1);
 }
 
 static int	check_flags2(char **str, t_node *current)
@@ -116,7 +108,7 @@ static int	check_flags2(char **str, t_node *current)
 	return (-1);
 }
 
-int			check_flags(char **str, t_node *current)
+int			check_flags(char **str, t_node *current, va_list args)
 {
 	if (**str == '.')
 	{
@@ -135,5 +127,7 @@ int			check_flags(char **str, t_node *current)
 		*str = (*str) + 1;
 		return (1);
 	}
+	if (**str == '*')
+		return (check_from_arg(str, current, args));
 	return (check_flags2(str, current));
 }

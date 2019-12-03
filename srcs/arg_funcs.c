@@ -6,20 +6,21 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/08 10:26:46 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/29 16:27:07 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/12/02 17:47:11 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 #include "libft.h"
 
-int			text_to_node(t_node *current, char *str, int len)
+int				text_to_node(t_node *current, char *str, int len)
 {
-	t_node	*temp;
+	t_node		*temp;
 
 	if (!(temp = (t_node *)malloc(sizeof(t_node))))
 		return (-1);
 	temp->str = (ft_strndup(str - len, len));
+	add_color(temp);
 	current->next = temp;
 	current = temp;
 	temp->next = NULL;
