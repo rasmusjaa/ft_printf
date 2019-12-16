@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/03 11:47:32 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/12/03 12:55:59 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/12/16 17:13:41 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ int			ft_dprintf(int fd, const char *format, ...)
 	if (!str || str[0] == 0)
 	{
 		free(start);
-		return (1);
+		return (0);
 	}
 	rvalue = dparse(fd, str, args, start);
 	if (rvalue == -1)
-		return (1);
+		return (0);
 	va_end(args);
 	return (rvalue);
 }

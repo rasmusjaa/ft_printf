@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/19 17:41:12 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/12/03 11:20:06 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/12/16 13:47:01 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ int							arg_b_to_node(t_node *current, va_list args)
 
 	if (!(temp = (t_node *)malloc(sizeof(t_node))))
 		return (-1);
-	n = va_arg(args, long long unsigned int);
+	n = va_arg(args, unsigned long long);
 	current->nb = n;
-	if (current->l_flag == 1)
-		temp->str = ft_base_ltoa((long unsigned int)n, 2, BASE16LC);
-	else if (current->ll_flag == 1)
-		temp->str = ft_base_ltoa(n, 2, BASE16LC);
+	if (current->ll_flag == 1)
+		temp->str = ft_base_ultoa(n, 2, BASE16LC);
+	else if (current->l_flag == 1)
+		temp->str = ft_base_ultoa((unsigned long)n, 2, BASE16LC);
 	else
-		temp->str = ft_base_ltoa((unsigned int)n, 2, BASE16LC);
+		temp->str = ft_base_ultoa((unsigned int)n, 2, BASE16LC);
 	current->arg = 'd';
 	plus_minus(temp->str, n, current);
 	flags_from_temp(temp, current);

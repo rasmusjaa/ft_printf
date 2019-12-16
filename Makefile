@@ -6,7 +6,7 @@
 #    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/11/07 15:06:49 by rjaakonm          #+#    #+#              #
-#    Updated: 2019/12/03 12:05:02 by rjaakonm         ###   ########.fr        #
+#    Updated: 2019/12/16 16:43:09 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,4 +61,8 @@ re: fclean all
 
 run: re
 	gcc $(FLAGS) main.c libftprintf.a
+	./a.out
+
+run2: re
+	clang main.c libftprintf.a
 	./a.out

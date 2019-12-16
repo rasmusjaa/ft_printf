@@ -6,7 +6,7 @@
 #    By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/19 17:57:45 by rjaakonm          #+#    #+#              #
-#    Updated: 2019/11/13 16:55:28 by rjaakonm         ###   ########.fr        #
+#    Updated: 2019/12/16 13:40:36 by rjaakonm         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,9 @@ SRCS =	ft_lstiter.c \
 		ft_pow.c \
 		ft_strnew_c.c \
 		ft_base_ltoa.c \
-		ft_longlong_numbercount.c
+		ft_base_ultoa.c \
+		ft_longlong_numbercount.c \
+		ft_ulonglong_numbercount.c
 
 OBJS = $(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 11:58:55 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/25 11:08:38 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/12/16 13:40:07 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,12 +93,15 @@ int					ft_count_words(char *s, char c);
 int					ft_len_itoc(char *s, int i, char c);
 int					ft_int_numbercount(int n);
 int					ft_longlong_numbercount(long long n, int base);
+int					ft_ulonglong_numbercount(unsigned long long nb, int base);
 char				*ft_str_rev(char *s);
 void				ft_int_swap(int *a, int *b);
 void				ft_char_swap(char *a, char *b);
 long long			ft_pow(long long n, int pow);
 char				*ft_strnew_c(size_t size, char c);
-char				*ft_base_ltoa(long long n, int base, char *chars);
+char				*ft_base_ltoa(long long n, int base, char *chararr);
+char				*ft_base_ultoa(unsigned long long nb,
+						int base, char *chararr);
 
 int					ft_get_next_line(const int fd, char **line);
 

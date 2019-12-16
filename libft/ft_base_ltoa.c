@@ -6,13 +6,23 @@
 /*   By: rjaakonm <rjaakonm@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/13 16:13:20 by rjaakonm          #+#    #+#             */
-/*   Updated: 2019/11/13 16:43:54 by rjaakonm         ###   ########.fr       */
+/*   Updated: 2019/12/16 13:18:33 by rjaakonm         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char				*ft_base_ltoa(long long n, int base, char *chararr)
+static char		*min_longlong(char *str)
+{
+	char		*tmp;
+
+	tmp = str;
+	str = ft_strdup("-9223372036854775808");
+	free(tmp);
+	return (str);
+}
+
+char			*ft_base_ltoa(long long n, int base, char *chararr)
 {
 	long long	nb;
 	char		*res;
@@ -24,6 +34,8 @@ char				*ft_base_ltoa(long long n, int base, char *chararr)
 		return (NULL);
 	if (nb < 0)
 	{
+		if (nb == -9223372036854775807 - 1)
+			return (min_longlong(res));
 		nb = nb * -1;
 		res[0] = '-';
 	}
